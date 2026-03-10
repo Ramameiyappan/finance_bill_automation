@@ -1,3 +1,7 @@
+"""
+Extract text from invoice documents using PDF parsing
+and OCR for scanned images.
+"""
 import fitz
 from pdf2image import convert_from_path
 import cv2
@@ -12,7 +16,7 @@ logging.basicConfig(
 )
 
 def extract_text_pdf(pdf_path):
-    """ extracting pdf text by its digital or scanned copy """
+    """Extract text from digital or scanned PDF files."""
     logging.info(f"Using PyMuPDF for {pdf_path}")
     text = ""
     full_text = ""
@@ -33,7 +37,7 @@ def extract_text_pdf(pdf_path):
     return full_text
 
 def preprocess_image(image):
-    """ preprocess the image to suitable for ocr"""
+    """Preprocess image to improve OCR accuracy."""
     img = np.array(image)
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray = cv2.resize(gray, None, fx=2.5, fy=2.5)
@@ -42,20 +46,20 @@ def preprocess_image(image):
     return thresh
 
 def ocr_image(image):
-    """ extract text from ocr of tesseract"""
+    """Perform OCR using Tesseract to extract text."""
     processed = preprocess_image(image)
     text = pytesseract.image_to_string(processed, lang="eng", config="--oem 3 --psm 6")
     return text
 
 def extract_text_image(image_path):
-    """ extracting text from image """
+    """Extract text from image invoices using OCR."""
     logging.info(f"Using OCR for image: {image_path}")
     image = Image.open(image_path)
     text = ocr_image(image)
     return text
 
 def extract_text(file_path):
-    """ based on file format extract the text"""
+    """Detect file type and extract text accordingly."""
     ext = file_path.lower().split(".")[-1]
 
     if ext == "pdf":

@@ -1,3 +1,7 @@
+"""
+Generate monthly Excel expense reports from stored
+invoice and line item data.
+"""
 import os
 from collections import defaultdict
 from openpyxl import Workbook
@@ -9,6 +13,7 @@ from database.models import Invoice, LineItem
 OUTPUT_FOLDER = "output"
 
 def fetch_month_data(year, month):
+    """Retrieve invoices and line items for a specific month."""
     if month == 12:
         next_month = datetime(year + 1, 1, 1)
     else:
@@ -27,6 +32,7 @@ def fetch_month_data(year, month):
     return invoices, line_items
 
 def generate_category_summary(invoices):
+    """Calculate total expense for each category."""
     summary = defaultdict(float)
     for invoice in invoices:
         category = invoice.category or "Other"
@@ -34,6 +40,7 @@ def generate_category_summary(invoices):
     return summary
 
 def generate_excel_report(year=None, month=None):
+    """Create Excel report with invoices, line items, and charts."""
     now = datetime.now()
     year = year or now.year
     month = month or now.month

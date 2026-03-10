@@ -1,3 +1,7 @@
+"""
+Database manager for storing invoices and line items
+using SQLAlchemy with SQLite.
+"""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from datetime import datetime
@@ -8,9 +12,11 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
 def init_db():
+    """Initialize database tables if they do not exist."""
     Base.metadata.create_all(engine)
 
 def to_date(value):
+    """Convert string value into a valid date format."""
     if not value:
         return None
     formats = ["%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%Y/%m/%d"]
@@ -23,6 +29,7 @@ def to_date(value):
     return None
 
 def to_float(value):
+    """Convert numeric values to float safely."""
     if value is None:
         return None
     try:
@@ -31,6 +38,7 @@ def to_float(value):
         return None
 
 def save_invoice(data, file_path):
+    """Store invoice and line items into the database."""
     session = SessionLocal()
     try:
         existing = session.query(Invoice).filter_by(

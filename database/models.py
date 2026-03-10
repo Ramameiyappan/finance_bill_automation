@@ -1,3 +1,7 @@
+"""
+Database models defining Invoice and LineItem tables
+with a parent-child relationship.
+"""
 from sqlalchemy import (Column, Integer, String,
     Float, ForeignKey, DateTime, Date)
 from sqlalchemy.orm import relationship

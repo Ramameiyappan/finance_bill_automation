@@ -1,3 +1,7 @@
+"""
+Monitor Gmail inbox and download invoice attachments automatically.
+Attachments are stored in vendor-based folders for processing.
+"""
 import os
 import base64
 import datetime
@@ -22,7 +26,7 @@ logging.basicConfig(
 )
 
 def authenticate_gmail():
-    ''' Authenticate Gmail API using OAuth '''
+    """Authenticate Gmail API using OAuth credentials."""
     creds = None
     # check for stored credentials
     if os.path.exists("token.json"):
@@ -41,7 +45,7 @@ def authenticate_gmail():
     return service
 
 def get_vendor_name(headers):
-    """Extract sender_vendor name"""
+    """Extract vendor name from email sender information."""
     sender = ""
     for header in headers:
         if header["name"] == "From":
@@ -57,7 +61,7 @@ def get_vendor_name(headers):
     return vendor
 
 def save_attachment(filename, data, vendor):
-    """Save attachment to bills/YYYY-MM/vendor_name/"""
+    """Save attachment to bills/YYYY-MM/vendor folder."""    
     today = datetime.datetime.now()
     month_folder = today.strftime("%Y-%m")
     path = os.path.join(BILLS_FOLDER, month_folder, vendor)
@@ -68,7 +72,7 @@ def save_attachment(filename, data, vendor):
     logging.info(f"Saved attachment: {file_path}")
 
 def process_parts(parts, service, msg_id, vendor):
-    """ Recursively process message parts to extract attachments """
+    """Recursively scan email parts and download valid attachments."""
     has_attachment = False
     for part in parts:
         filename = part.get("filename")
@@ -89,7 +93,7 @@ def process_parts(parts, service, msg_id, vendor):
     return has_attachment
 
 def download_attachments(service, msg_id):
-    """Download attachments from a message"""
+    """Download attachments from a specific email message."""
     # get the entire message from mail id, thread id, snippet, payload
     message = service.users().messages().get(
         userId="me",
@@ -106,6 +110,7 @@ def download_attachments(service, msg_id):
     return has_attachment
 
 def mark_email_as_read(service, msg_id):
+    """Mark processed email as read in Gmail."""
     service.users().messages().modify(
         userId="me",
         id=msg_id,
@@ -116,6 +121,7 @@ def mark_email_as_read(service, msg_id):
     logging.info(f"Marked email {msg_id} as read")
 
 def get_unread_messages(service):
+    """Retrieve unread inbox messages containing attachments."""
     messages = []
     next_page = None
     while True:
@@ -133,7 +139,7 @@ def get_unread_messages(service):
     return messages
 
 def monitor_inbox():
-    """Check inbox and download attachments"""
+    """Check inbox and download invoice attachments automatically."""
     service = authenticate_gmail()
     # get all message id from the inbox along with nextPageToken, resultSizeEstimate
     messages = get_unread_messages(service)

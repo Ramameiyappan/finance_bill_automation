@@ -1,3 +1,7 @@
+"""
+Parse invoice text using Gemini AI and convert it
+into structured invoice data.
+"""
 import os
 from dotenv import load_dotenv
 import json
@@ -18,7 +22,7 @@ genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-2.5-flash")
 
 def build_prompt(invoice_text):
-    """ promt given to gemini """
+    """Create prompt used by Gemini to extract invoice fields."""
     prompt = f"""
 You are an intelligent invoice parser.
 
@@ -77,7 +81,7 @@ Invoice Text:
     return prompt
 
 def extract_invoice_fields(invoice_text):
-    """ extract the field """
+    """Use Gemini AI to extract structured invoice data."""
     prompt = build_prompt(invoice_text)
     for attempt in range(3):
         try:
