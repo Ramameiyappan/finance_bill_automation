@@ -10,3 +10,4 @@ __pycache__/
 *.pyc
 .log
 email_monitor.log
+credentials.json
