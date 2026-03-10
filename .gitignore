@@ -1,0 +1,12 @@
+token.json
+.env
+.virtual_environment
+virtual_environment/
+finance.db
+archive/
+bills/
+output/
+__pycache__/
+*.pyc
+.log
+email_monitor.log

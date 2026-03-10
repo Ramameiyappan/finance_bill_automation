@@ -1,0 +1,12 @@
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+pymupdf
+pdf2image
+pytesseract
+pillow
+opencv-python
+google-generativeai
+sqlalchemy
+openpyxl
+python-dotenv
