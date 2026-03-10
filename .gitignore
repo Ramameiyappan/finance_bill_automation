@@ -1,13 +1,27 @@
-token.json
+# Environment variables
 .env
+
+# Gmail API tokens
+token.json
+credentials.json
+
+# Python virtual environments
 .virtual_environment
 virtual_environment/
+venv/
+env/
+
+# Database
 finance.db
-archive/
+
+# Generated folders
 bills/
 output/
+
+# Python cache
 __pycache__/
 *.pyc
-.log
+
+# Logs
+*.log
 email_monitor.log
-credentials.json
